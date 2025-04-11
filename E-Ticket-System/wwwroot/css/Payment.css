@@ -1,0 +1,114 @@
+﻿:root {
+    --primary: #FFD700;
+    --secondary: #1a1a1a;
+    --accent: #2b2b2b;
+}
+
+body {
+    background: linear-gradient(135deg, #0a0a0a 0%, #1e1e1e 100%);
+    color: white;
+    min-height: 100vh;
+}
+
+.movie-poster {
+    width: 100%;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    transition: transform 0.3s ease;
+}
+
+    .movie-poster:hover {
+        transform: scale(1.02);
+    }
+
+.date-picker {
+    background: var(--accent);
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.date-btn {
+    background: none;
+    border: 2px solid var(--primary);
+    color: var(--primary);
+    border-radius: 8px;
+    padding: 1rem;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+    .date-btn.active {
+        background: var(--primary);
+        color: var(--secondary);
+        font-weight: 600;
+    }
+
+.cinema-card {
+    background: var(--accent);
+    border-radius: 15px;
+    border: 1px solid rgba(255,215,0,0.1);
+    margin: 1rem 0;
+    overflow: hidden;
+}
+
+.cinema-header {
+    background: rgba(255,215,0,0.1);
+    padding: 1rem;
+    border-bottom: 2px solid var(--primary);
+}
+
+.time-slot {
+    background: var(--secondary);
+    border: 1px solid var(--primary);
+    color: var(--primary);
+    border-radius: 8px;
+    padding: 0.8rem 1.2rem;
+    margin: 0.5rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    position: relative;
+}
+
+    .time-slot:hover {
+        background: var(--primary);
+        color: var(--secondary);
+        transform: translateY(-2px);
+    }
+
+    .time-slot::after {
+        content: "2D";
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        font-size: 0.7rem;
+        color: rgba(255,215,0,0.7);
+    }
+
+.trailer-btn {
+    background: var(--primary);
+    color: var(--secondary);
+    font-weight: 600;
+    padding: 0.8rem 2rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+    .trailer-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 15px rgba(255,215,0,0.3);
+    }
+
+.movie-title {
+    font-size: 2.5rem;
+    letter-spacing: -0.5px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.category-tag {
+    background: rgba(255,215,0,0.1);
+    color: var(--primary);
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+}

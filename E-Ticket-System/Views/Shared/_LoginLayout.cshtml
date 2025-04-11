@@ -1,0 +1,51 @@
+﻿﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    
+    <link rel="stylesheet" href="~/css/particles.css">
+    <link rel="stylesheet" href="~/css/login.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="d-flex align-items-center justify-content-center vh-100 bg-dark text-white">
+    <div id="particles-js" class="position-fixed w-100 h-100"></div>
+
+    <div class="container">
+        @RenderBody()
+    </div>
+</body>
+
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            particlesJS("particles-js", {
+                particles: {
+                    number: { value: 100, density: { enable: true, value_area: 900 } },
+                    color: { value: "#ffffff" },
+                    shape: { type: "circle" },
+                    opacity: { value: 0.6, random: false },
+                    size: { value: 3, random: true },
+                    line_linked: { enable: true, distance: 120, color: "#ffffff", opacity: 0.4, width: 1 },
+                    move: { enable: true, speed: 1.5, direction: "none", random: false, straight: false }
+                },
+                interactivity: {
+                    events: {
+                        onhover: { enable: true, mode: "repulse" },
+                        onclick: { enable: true, mode: "push" }
+                    },
+                    modes: {
+                        repulse: { distance: 100, duration: 0.4 },
+                        push: { particles_nb: 4 }
+                    }
+                }
+            });
+        });
+    </script>
+
+    @RenderSection("Scripts", required: false)
+
+</html>

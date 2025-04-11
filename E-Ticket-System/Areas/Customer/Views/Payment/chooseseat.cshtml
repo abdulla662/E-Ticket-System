@@ -1,0 +1,251 @@
+﻿@model E_Ticket_System.Models.Movie
+@using Newtonsoft.Json
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Your Seats</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .cinema-screen {
+            background: linear-gradient(45deg, #666, #999);
+            width: 80%;
+            height: 30px;
+            margin: 2rem auto;
+            border-radius: 5px;
+            box-shadow: 0 0 20px rgba(0, 173, 181, 0.3);
+            color: white;
+            text-align: center;
+            padding-top: 5px;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .seats-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .seat-row {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .seat {
+            width: 35px;
+            height: 35px;
+            border: 2px solid #00adb5;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background-color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+            .seat:hover {
+                transform: scale(1.1);
+                background-color: #00adb5;
+                color: white;
+            }
+
+            .seat.selected {
+                background-color: #00adb5;
+                color: white;
+                border-color: #007bff;
+            }
+
+            .seat.occupied {
+                background-color: #393e46;
+                border-color: #393e46;
+                cursor: not-allowed;
+            }
+
+            .seat.legend {
+                cursor: default;
+                pointer-events: none;
+            }
+
+        .checkout-btn {
+            background: linear-gradient(45deg, #00adb5, #007bff);
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border-radius: 30px;
+            color: white;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+        }
+
+            .checkout-btn:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 10px 20px rgba(0, 173, 181, 0.3);
+            }
+
+        .selected-info {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 2rem;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+
+        .progress-bar {
+            height: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background-color: #00adb5;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <div class="cinema-screen">Premium Screen</div>
+
+        <!-- Progress Indicator -->
+        <div class="progress-bar mb-4">
+            <div class="progress" style="width: 50%"></div>
+        </div>
+
+        <div class="seats-container">
+            <!-- Seat Legend -->
+            <div class="seat-row mb-4">
+                <div class="seat legend" style="background-color: #fff"></div><span class="mx-2">Available</span>
+                <div class="seat legend" style="background-color: #00adb5"></div><span class="mx-2">Selected</span>
+                <div class="seat legend" style="background-color: #393e46"></div><span class="mx-2">Booked</span>
+            </div>
+
+            <!-- Dynamic Seat Grid -->
+            <div id="seat-map"></div>
+
+            <!-- Form and Selection Info -->
+            <div class="selected-info text-center">
+                <h4 class="mb-3">Selected Seats: <span id="selected-count">0</span></h4>
+
+                <form id="seatForm" method="post" action="/Customer/Payment/ReserveSeats">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="selectedSeats" id="selectedSeatsInput">
+                    <input type="hidden" name="movieId" value="@Model.Id">
+                    <input type="hidden" name="cinemaId" value="@Model.Cinema.Id">
+                    <button type="button" class="checkout-btn" onclick="confirmSelection()">
+                        Confirm Selection <i class="fas fa-arrow-right ms-2"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal fade" id="confirmationModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm Your Selection</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>You've selected <strong><span id="modal-seat-count">0</span></strong> seat(s)</p>
+                    <p>Total Price: $<span id="modal-total-price">0</span></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Edit</button>
+                    <button type="button" class="btn btn-primary" onclick="submitForm()">Proceed to Payment</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const rows = 8;
+        const cols = 10;
+        const pricePerSeat = 15;
+        let selectedSeats = [];
+
+        const bookedSeats = @Html.Raw(JsonConvert.SerializeObject(ViewBag.BookedSeats ?? new List<string>()));
+
+        function generateSeats() {
+            const seatMap = document.getElementById('seat-map');
+            seatMap.innerHTML = '';
+
+            for (let row = 0; row < rows; row++) {
+                const seatRow = document.createElement('div');
+                seatRow.className = 'seat-row';
+
+                for (let col = 0; col < cols; col++) {
+                    const seat = document.createElement('div');
+                    const seatNumber = `${String.fromCharCode(65 + row)}${col + 1}`;
+                    seat.className = 'seat';
+                    seat.dataset.seat = seatNumber;
+                    seat.textContent = seatNumber;
+
+                    if (bookedSeats.includes(seatNumber)) {
+                        seat.classList.add('occupied');
+                    } else {
+                        seat.addEventListener('click', toggleSeat);
+                    }
+
+                    seatRow.appendChild(seat);
+                }
+
+                seatMap.appendChild(seatRow);
+            }
+        }
+
+        function toggleSeat(e) {
+            const seat = e.target;
+            const seatNumber = seat.dataset.seat;
+
+            if (seat.classList.contains('occupied')) return;
+
+            seat.classList.toggle('selected');
+
+            if (selectedSeats.includes(seatNumber)) {
+                selectedSeats = selectedSeats.filter(s => s !== seatNumber);
+            } else {
+                selectedSeats.push(seatNumber);
+            }
+
+            updateSelectionInfo();
+        }
+
+        function updateSelectionInfo() {
+            document.getElementById('selected-count').textContent = selectedSeats.length;
+        }
+
+        function confirmSelection() {
+            if (selectedSeats.length === 0) {
+                alert('Please select at least one seat!');
+                return;
+            }
+
+            document.getElementById('modal-seat-count').textContent = selectedSeats.length;
+            document.getElementById('modal-total-price').textContent = selectedSeats.length * pricePerSeat;
+
+            const modal = new bootstrap.Modal(document.getElementById('confirmationModal'));
+            modal.show();
+        }
+
+        function submitForm() {
+            document.getElementById('selectedSeatsInput').value = selectedSeats.join(',');
+            document.getElementById('seatForm').submit();
+        }
+
+        generateSeats();
+    </script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+﻿@model E_Ticket_System.Models.ViewModel.RegisterVm
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<h2 class="p-3 text-center fw-bold" style="font-size: 2rem;">Create An Account</h2>
+
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Register">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password" class="control-label"></label>
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConfirmPassword" class="control-label"></label>
+                <input asp-for="ConfirmPassword" class="form-control" />
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Adress" class="control-label"></label>
+                <input asp-for="Adress" class="form-control" />
+                <span asp-validation-for="Adress" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-3">
+                <input type="submit" value="SignUp" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+</div>
+

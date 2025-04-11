@@ -1,0 +1,65 @@
+﻿@model E_Ticket_System.Models.Movie 
+
+<div class="container py-5">
+    <!-- Movie Details Section -->
+    <div class="row">
+      
+        
+            
+         <div class="col-md-4">
+            <img src="@(Model.ImgUrl.StartsWith("http") ? Model.ImgUrl : "/images/movies/" + Model.ImgUrl)"
+                 class="img-fluid rounded movie-poster shadow-lg" alt="Movie Name">
+        </div>
+
+        <!-- Movie Info -->
+        <div class="col-md-8">
+            <span class="badge bg-primary px-3 py-2">Available</span>
+            <h1 class="fw-bold mt-2">Details: <span class="text-warning">@Model.Name</span></h1>
+            <p class="mt-3 text-muted">
+               @Model.Description
+            </p>
+
+            <p class="fs-5 text-light"><strong>💰 Price:</strong> @Model.Price</p>
+            <p class="fs-5 text-light"><strong>🎥 Cinema:</strong> @Model.Cinema.Name</p>
+            <p class="fs-5 text-light"><strong>📅 Start Date:</strong>@Model.StartDate</p>
+            <p class="fs-5 text-light"><strong>⏳ End Date:</strong> @Model.EndDate</p>
+            <p class="fs-5 text-light"><strong>🎭 Category:</strong> @Model.Category.Name</p>
+
+            <!-- Buttons -->
+            <div class="d-flex mt-4">
+                    <a href="/Customer/Home/index" class="btn btn-outline-white px-4 text-white" style="transition: 0.3s; color: white;" onmouseover="this.style.color='yellow'" onmouseout="this.style.color='white'">⬅ Back to Movies</a>
+                </div>
+        </div>
+           
+        }
+        <!-- Cast Section -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <h2 class="text-warning mb-3">🎭 Cast</h2>
+                <div class="d-flex flex-wrap justify-content-start">
+                    @foreach (var actor in ViewBag.Actors)
+                    {
+                        <div class="text-center me-4 mb-4">
+                            <img src="~/images/cast/@actor.ProfilePicture" class="rounded-circle shadow-lg" width="100" height="100"
+                                 onclick="window.location.href='@Url.Action("ActorDetails", "MovieDetails", new { area = "Customer", actorid = actor.Id })'"
+                                 style="cursor: pointer;">
+                            <a href="/Customer/MovieDetails/ActorDetails?actorid=@actor.Id" class="mt-2 text-light">@actor.FirstName</a>
+                        </div>
+
+                    }
+
+                </div>
+            </div>
+        </div>
+
+            <div class="row mt-5">
+                <div class="col-12 text-center">
+                    <h2 class="text-warning mb-3">🎬 Watch Trailer</h2>
+                    <div class="ratio ratio-16x9 trailer-container">
+                        <iframe src="@Model.TrailerUrl" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+
+        
+    </div>

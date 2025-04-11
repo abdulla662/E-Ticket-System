@@ -1,0 +1,40 @@
+﻿@model IEnumerable<E_Ticket_System.Models.Movie>  
+
+<div class="hero-section ">
+    <div class="text-center">
+        <h1 class="fw-bold text-warning display-3">Welcome to Movie Point</h1>
+        <p class="fs-4">Browse and book tickets for the latest movies now!</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row g-4">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4 d-flex align-items-stretch">
+                <div class="card bg-secondary text-light shadow-lg h-100 d-flex flex-column">
+                    <img src="@(item.ImgUrl.StartsWith("http") ? item.ImgUrl : "/images/movies/" + item.ImgUrl)"
+                         class="card-img-top" alt="@item.Name">
+                         <div class="card-body text-center">
+                            <h5 class="card-title text-warning">@item.Name</h5>
+                            <p class="text-warning">Price: $@item.Price</p>
+                            <p>📅 Start Date: @item.StartDate.ToString("dd MMM yyyy")</p>
+                            <p>⏳ End Date: @item.EndDate.ToString("dd MMM yyyy")</p>
+                            <p>🎥 Cinema: @item.Cinema.Name</p>
+                            <div class="d-flex justify-content-between">
+                            <a href="/Customer/MovieDetails/Details?movieid=@item.Id" class="btn btn-info w-50 me-2">Show Details</a>
+                            @if (item.StartDate <= DateTime.Now && item.EndDate >= DateTime.Now)
+                            {
+                                <a href="/Customer/Payment/index?id=@item.Id" class="btn btn-warning w-50">Book Ticket</a>
+                            }
+                            else
+                            {
+                                <a href="#" class="btn btn-secondary w-50" tabindex="-1" aria-disabled="true">Not Available</a>
+                            }
+                            </div>
+                        </div>
+                    </div>
+                </div>    
+        }
+    </div>
+</div>

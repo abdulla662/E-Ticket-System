@@ -1,0 +1,33 @@
+﻿@model E_Ticket_System.Models.Cinema
+
+<h1>@Model.Name</h1>
+
+<h3>Movies Available in this Cinema:</h3>
+
+@if (Model.Movies != null && Model.Movies.Any())
+{
+    <div class="container py-5">
+        <div class="row g-4">
+            @foreach (var movie in Model.Movies)
+            {
+                <div class="col-md-4 d-flex align-items-stretch">
+                    <div class="card bg-secondary text-light shadow-lg h-100 d-flex flex-column">
+                        <img src="~/images/movies/@movie.ImgUrl" class="card-img-top" alt="@movie.Name">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">@movie.Name</h5>
+                            <p class="text-muted">Price: $@movie.Price</p>
+                            <p>📅 Start Date: @movie.StartDate.ToString("dd MMM yyyy")</p>
+                            <p>⏳ End Date: @movie.EndDate.ToString("dd MMM yyyy")</p>
+                            <p>🎥 Cinema: @(movie.Cinema?.Name ?? "Unknown")</p>
+                            <a href="/Customer/MovieDetails/Details?movieid=@movie.Id" class="btn btn-warning">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+else
+{
+    <p>No movies found for this cinema.</p>
+}

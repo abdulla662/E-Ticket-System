@@ -1,0 +1,74 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - E_Ticket_System</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/E_Ticket_System.styles.css" asp-append-version="true" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/site.css" />
+
+
+</head>
+<body class="bg-dark text-light d-flex flex-column min-vh-100">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary px-3 shadow-lg">
+        <a class="navbar-brand fw-bold" href="#">Movie Point</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <ul class="navbar-nav ms-auto">
+            @if (User.IsInRole("Admin"))
+            {
+                <li class="nav-item">
+                    <a class="nav-link text-warning fw-bold" href="/Admin/movie/Index">Admin Management</a>
+                </li>
+            }
+
+            <li class="nav-item">
+                <a class="nav-link" href="/Customer/Home/Index">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/Customer/Category/CategoryView">Categories</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/Customer/Cinema/CinemaView">Cinemas</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/Customer/myticket/index">My Tickets</a>
+            </li>
+        </ul>
+            <div class="d-flex align-items-center text-white ms-4">
+                @if (User.Identity.IsAuthenticated)
+                
+                {
+                    <span class="me-3">Welcome,@User.Identity.Name</span>
+
+                }
+                <a class="btn btn-light" href="/Identity/Account/userpage" style="margin-right: 10px;">Account Manage</a>
+                <a class="btn btn-light" href="/Identity/Account/Logout">Logout</a>
+
+
+            </div>
+        </div>
+        </div>
+        <form class="d-flex ms-3" method="get" asp-area="Customer" asp-controller="Home" asp-action="Search" >
+            <input class="form-control me-2" type="search" name="keyword" placeholder="Search for movie..." aria-label="Search">
+            <button class="btn btn-light" type="submit">Search</button>
+        </form>
+
+    </nav>
+    <div class="container text-center my-3">
+        @RenderBody()
+    </div>
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+
+</html>

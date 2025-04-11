@@ -1,0 +1,66 @@
+﻿@model IEnumerable<Movie>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Movie Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center">🎬 Movie Management Panel</h2>
+        <a href="/Admin/Movie/create" class="btn btn-success my-3">➕ Add New Movie</a>
+
+        <table class="table table-bordered text-center">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td><img src=@(item.ImgUrl.StartsWith("http") ? item.ImgUrl : "/images/movies/" + item.ImgUrl) alt="Movie" style="width: 50px; height: 50px;"></td>
+                        <td>@item.Name</td>
+                        <td>@item.Price</td>
+                        <td>
+                            <a href="/admin/Movie/Edit?id=@item.Id" class="btn btn-warning btn-sm">✏️ Edit</a>
+                            <button class="btn btn-danger btn-sm" onclick="confirmDelete(@item.Id)">🗑️ Delete</button>
+                        </td>
+                    </tr>
+                } 
+
+            </tbody>
+        </table>
+    </div>
+
+  
+    @section Scripts {
+        <script>
+            function confirmDelete(movieId) {
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, delete it!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = "/admin/Movie/Delete?movieid=" + movieId;
+                    }
+                });
+            }
+        </script>
+    }
+</body>
+</html>

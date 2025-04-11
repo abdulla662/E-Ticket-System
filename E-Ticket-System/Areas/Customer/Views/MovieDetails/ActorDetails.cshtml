@@ -1,0 +1,67 @@
+﻿@model E_Ticket_System.Models.Actor
+
+
+<div class="container py-5">
+    <!-- Actor Details Section -->
+    <div class="row">
+        <!-- Actor Profile Picture -->
+        <div class="col-md-4 text-center">
+            <img src="~/images/cast/@Model.ProfilePicture"
+                 class="img-fluid rounded-circle shadow-lg"
+                 style="width: 200px; height: 200px; object-fit: cover;"
+                >
+        </div>
+
+        <!-- Actor Info -->
+        <div class="col-md-8">
+            <h1 class="fw-bold mt-2 text-warning">@Model.FirstName</h1>
+            <p class="mt-3 text-muted">@Model.News</p>
+
+            <!-- Social Media Links -->
+            <div class="mt-4">
+                <h4 class="text-light">Follow on Social Media</h4>
+                <div class="d-flex">
+                    <a href="https://www.facebook.com" class="btn btn-primary me-2" target="_blank">
+                        <i class="fab fa-facebook"></i> Facebook
+                    </a>
+                    <a href="https://www.x.com" class="btn btn-info me-2" target="_blank">
+                        <i class="fab fa-twitter"></i> Twitter
+                    </a>
+                    <a href="https://www.Instagram.com" class="btn btn-danger me-2" target="_blank">
+                        <i class="fab fa-instagram"></i> Instagram
+                    </a>
+                </div>
+            </div>
+            <!-- Movies Section -->
+            <div class="row mt-5">
+                <div class="col-12">
+                    <h2 class="text-warning mb-3">🎬 Movies Featuring @Model.FirstName</h2>
+                    <div class="d-flex flex-wrap">
+                        @foreach (var movie in ViewBag.Movies)
+                        {
+                            <div class="card bg-dark text-white me-3 mb-3" style="width: 18rem;">
+                                <img src="~/images/movies/@movie.ImgUrl" class="card-img-top" alt="@movie.Name">
+                                <div class="card-body">
+                                    <h5 class="card-title">@movie.Name</h5>
+                                    <a href="/Customer/MovieDetails/Details?movieid=@movie.Id" class="btn btn-primary">
+                                        View Movie
+                                    </a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Back to Actors List Button -->
+            <div class="mt-4">
+                <a href="javascript:history.back()" class="btn btn-outline-light">
+                    ⬅ Back to Actors
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Include FontAwesome for Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">

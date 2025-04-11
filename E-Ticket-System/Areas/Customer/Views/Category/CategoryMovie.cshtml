@@ -1,0 +1,47 @@
+﻿@model E_Ticket_System.Models.Category
+
+<h1>@Model.Name</h1>
+
+<h3>Movies in this category:</h3>
+
+@if (Model.Movies != null && Model.Movies.Any())
+{
+    <div class="hero-section ">
+        <div class="text-center">
+            <h1 class="fw-bold text-warning display-3">Welcome to Movie Point</h1>
+            <p class="fs-4">Browse and book tickets for the latest movies now!</p>
+        </div>
+    </div>
+
+    <div class="container py-5">
+        <div class="row g-4">
+            @foreach (var movie in Model.Movies)
+            {
+                <div class="col-md-4 d-flex align-items-stretch">
+                    <div class="card bg-secondary text-light shadow-lg h-100 d-flex flex-column">
+                        <img src="~/images/movies/@movie.ImgUrl" class="card-img-top" alt="@movie.Name">
+                        <div class="card-body text-center">
+                            <h5 class="card-title text-warning">@movie.Name</h5>
+                            <p class="text-warning">Price: $@movie.Price</p>
+                            <p>📅 Start Date: @movie.StartDate.ToString("dd MMM yyyy")</p>
+                            <p>⏳ End Date: @movie.EndDate.ToString("dd MMM yyyy")</p>
+                            @{
+                                var cinema = ((IEnumerable<E_Ticket_System.Models.Cinema>)ViewBag.Cinemas)
+                                .FirstOrDefault(c => c.Id == movie.CinemaId);
+                            }
+                            <p>🎥 Cinema: @(cinema?.Name ?? "Unknown")</p>
+
+                            <div class="d-flex justify-content-between">
+                                <a href="/Customer/MovieDetails/Details?movieid=@movie.Id" class="btn btn-info w-50 me-2">Show Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+else
+{
+    <p>No movies found in this category.</p>
+}
